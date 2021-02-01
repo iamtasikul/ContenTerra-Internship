@@ -1,0 +1,234 @@
+PostgreSQL
+
+Windows Application :-SQL Shell (psql) / pgAdmin
+
+
+//Create Database
+CREATE DATABASE school;
+
+//Show Database
+\l
+
+//Drop Database
+DROP DATABASE school;
+
+//Conntect Database
+\c school;
+
+//Create Table
+CREATE TABLE students(id integer not null primary key,fname text not null,lname text not null,age int not null);
+
+//View Table
+\d
+
+//Drop Table
+DROP TABLE students;
+
+//Create Schema
+\c school;
+CREATE SCHEMA newschema;
+
+//Delete Schema
+DROP SCHEMA newschema;
+
+//Insert Record Into Table
+INSERT INTO students(id,fname,lname,age) values(1,'Tasikul','Islam',24);
+
+//View Records
+SELECT * From students;
+
+//Insert Record Into Table
+INSERT INTO students values(2,'Ikbal','Hossain',22);
+
+//View Records
+SELECT * From students;
+
+//Insert Multiple Records Into Table
+INSERT INTO students values(3,'John','Doe',42),(4,'Russel','Burnson',36);
+
+//View Records
+SELECT * From students;
+
+=============SELECT Clause ================
+
+//Select from Specific Column
+select id,fname as firstName,lname from students;
+
+//Select from all Column
+select * from students;
+
+=============WHERE Clause  (Use For Condition)================
+
+select * from students where age>=30;
+
+//Morethan on Condition 
+select * from students where lname='Islam' AND age>=20;
+
+=============UPDATE Clause  (Use For Modification)================
+update students set lname='Biswas' where lname='Islam';
+
+=============DELETE Clause  (Use For Delete Record)================
+
+DELETE FROM students WHERE fname='John';
+DELETE FROM students
+
+=============ORDER BY Clause  (Use For Sorting Record)================ 
+
+select * from students order by age asc; //Small to Large (default)
+select * from students order by age desc;//Large to Small
+
+=============GROUP BY Clause  (Use to group rows that have the same values -  identify unique rows)================ 
+
+select name,sum(salary) from teachers group by name;
+
+=============HAVING Clause  (Use to filter grouped rows - use with group by clause)================ 
+
+select name from teachers group by name having count(name)>1;
+
+
+===================Operators==============================
+
+//AND (execute when both Conditions true)
+select * from students where lname='Islam' AND age>=20;
+
+//OR (execute when any one or both Condition is true)
+select * from students where lname='Islam' OR age>=20;
+select * from students where (lname='Islam' OR lname='Biswas') AND age>=20;
+
+//IS NOT
+select * from students where lname is not null;
+
+//LIKE (Searching)
+select * from students where fname like 'T%';
+
+//IN
+select * from students where age in (19,21,22);
+
+//NOT IN
+select * from students where age not in (19,21,22)
+
+//BETWEEN
+select * from students where age between 22 and 30;
+
+
+
+========================views (virtual table)===============
+
+//create view
+create view studentview as select fname,age from students;
+
+//Show View
+SELECT * FROM studentview;
+
+//Delete View
+drop view studentview;
+
+=================Join============================
+//inner join (Join Common)
+select students.fname,students.lname,teachers.name from students inner join teachers on students.id=teachers.id;
+
+//left join (join left table all rows (here students) with right table matching rows)
+select students.fname,students.age,teachers.name from students left join teachers on students.id=teachers.id;
+
+//Right join (join Right table all rows (here teachers) with left table matching rows)
+select students.fname,students.age,teachers.name from students right join teachers on students.id=teachers.id;
+
+//Full Outer join (join Right table all rows with left table all rows)
+select students.fname,students.age,teachers.name from students full outer join teachers on students.id=teachers.id;
+//Cross Join (like cross product in set)
+select students.fname,students.age,teachers.name from students cross join teachers;
+
+=====================Aggregate Functions====================
+//max
+select max(age) from students;
+//min
+select min(age) from students;
+//avg
+select avg(age) as avg_age from students;
+
+//avg with round (.xx)
+select round(avg(age),2) as avg_age from students;
+
+//sum
+select sum(salary) as total_salary from teachers;
+
+//count
+select count(*) as total_rows from teachers;
+
+============================User Defined Function=====================
+//Create Function
+
+create or replace function total_students()
+returns integer as $total$
+declare total integer;
+begin
+select count(*) into total from students;
+return total;
+end;
+$total$ language plpgsql;
+
+//Calling Function
+select total_students();
+
+//Create Function with argument
+create function sum(var1 integer,var2 integer)
+returns integer as $sum$
+begin
+return var1+var2;
+end;
+$sum$ language plpgsql;
+
+//calling function
+select sum(2,4)
+
+====================== Triggers On Insert Event (Run Automatically when call)===================
+//create employees table
+create table employees(id int primary key not null,name text not null,salary int not null);
+
+//create audit table
+create table audit(id int primary key not null,name text not null,entry_date text);
+
+//Create function
+create or replace function audit_log() returns trigger as $xyz$
+begin
+insert into audit(id,name,entry_date)values(new.id,new.name,current_timestamp);
+return new;
+end;
+$xyz$ language plpgsql;
+
+//Create Trigger
+create trigger audit_trigger after insert on employees
+for each row execute procedure audit_log();
+
+//currently audit table is empty
+select*from audit;
+
+//Insert Records
+insert into employees values(1,'Tasikul',10000);
+
+//check audilt log
+select*from audit;
+
+====================Alias(as)-Temporary Name===================
+select s.fname,t.name from students as s,teachers as t where s.id=t.id;
+
+=======================index========================
+//create table
+create table test(first_name text not null,last_name text not null,company_name text not null,address text not null,city text not null)
+
+//Export CSV Free Sample Data for Database Load Testing (https://www.briandunning.com/sample-data/)
+
+//Show Data
+SELECT * FROM test
+
+//Fetch Data (checking Time cost 12.26) (Without Index)
+explain select * from test where first_name='Ahmed';
+
+//Create Index 
+create index emp_index on test("first_name");
+
+//Fetch Data (checking Time cost 8.29) (With Index)
+explain select * from test where first_name='Ahmed';
+
+//Drop Index
+drop index emp_index;
