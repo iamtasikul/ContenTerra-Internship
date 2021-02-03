@@ -2,12 +2,25 @@ PostgreSQL
 
 Windows Application :-SQL Shell (psql) / pgAdmin
 
+//Help
+\h select
+
 
 //Create Database
 CREATE DATABASE school;
 
 //Show Database
 \l
+
+============Confirming the database size================
+//First, we return to expanded mode
+\x
+
+//Then, execute the following command
+\l+ school --(Size in KB)
+
+//check db size using sql command
+select pg_database_size('school');
 
 //Drop Database
 DROP DATABASE school;
@@ -18,11 +31,46 @@ DROP DATABASE school;
 //Create Table
 CREATE TABLE students(id integer not null primary key,fname text not null,lname text not null,age int not null);
 
-//View Table
+//Create table with Primary key
+CREATE TABLE users (
+pk int GENERATED ALWAYS AS IDENTITY,
+username text NOT NULL, 
+gecos text, 
+email text NOT NULL, 
+PRIMARY KEY( pk ),
+UNIQUE ( username )
+);
+
+CREATE TABLE categories (pk int GENERATED ALWAYS AS IDENTITY,title text,description text);
+
+//if not exist Create table with Primary key
+CREATE TABLE if not exists users (
+pk int GENERATED ALWAYS AS IDENTITY,
+username text NOT NULL, 
+gecos text, 
+email text NOT NULL, 
+PRIMARY KEY( pk ),
+UNIQUE ( username )
+);
+
+//list of all the tables
 \d
 
 //Drop Table
 DROP TABLE students;
+DROP TABLE if exists students;
+
+==========Managing temporary tables (which will only be visible
+within the session where the table was created.)===
+
+CREATE temp TABLE if not exists users (
+pk int GENERATED ALWAYS AS IDENTITY,
+username text NOT NULL, 
+gecos text, 
+email text NOT NULL, 
+PRIMARY KEY( pk ),
+UNIQUE ( username )
+);
 
 //Create Schema
 \c school;
@@ -34,20 +82,60 @@ DROP SCHEMA newschema;
 //Insert Record Into Table
 INSERT INTO students(id,fname,lname,age) values(1,'Tasikul','Islam',24);
 
+insert into users (username,gecos,email) values('myusername','mygecos','myemail');
+
 //View Records
 SELECT * From students;
+select pk,username,gecos,email from users;
 
 //Insert Record Into Table
 INSERT INTO students values(2,'Ikbal','Hossain',22);
 
+insert into users (username,gecos,email) values('scotty','scotty_gecos','scotty_email');
+
 //View Records
 SELECT * From students;
+select pk,username,gecos,email from users order by username;
 
 //Insert Multiple Records Into Table
 INSERT INTO students values(3,'John','Doe',42),(4,'Russel','Burnson',36);
 
+insert into categories (title,description) values('apple', 'fruits'), ('orange','fruits'),('lettuce','vegetable');
+
+//Insert with Returning (Show inserted value)
+insert into categories (title,description) values('lichi', 'fruits') returning *;
+
+==//UPSERT ( insert a new record on top of the existing record or
+update an existing record.)===
+
+//create table
+DROP TABLE IF EXISTS customers;
+
+CREATE TABLE customers (
+	customer_id serial PRIMARY KEY,
+	name VARCHAR UNIQUE,
+	email VARCHAR NOT NULL,
+	active bool NOT NULL DEFAULT TRUE
+);
+
+//insert data
+INSERT INTO 
+    customers (name, email)
+VALUES 
+    ('IBM', 'contact@ibm.com'),
+    ('Microsoft', 'contact@microsoft.com'),
+    ('Intel', 'contact@intel.com');
+
+//update data
+INSERT INTO customers (name, email)
+VALUES('Microsoft','hotline@microsoft.com') 
+ON CONFLICT (name) 
+DO 
+   UPDATE SET email = EXCLUDED.email || ';' || customers.email;
+
 //View Records
 SELECT * From students;
+ select * from categories
 
 =============SELECT Clause ================
 
@@ -56,6 +144,15 @@ select id,fname as firstName,lname from students;
 
 //Select from all Column
 select * from students;
+
+===============DISTINCT (remove duplicate)=========
+select distinct fname from students;
+
+==================LIMIT =========
+select * from students LIMIT 2;
+
+===============Offset (is used to skip a specific number of rows)======
+select * from students offset 1 limit 2 ;
 
 =============WHERE Clause  (Use For Condition)================
 
@@ -71,7 +168,11 @@ update students set lname='Biswas' where lname='Islam';
 
 DELETE FROM students WHERE fname='John';
 DELETE FROM students
+delete from temp_categories ;--delete  all records
+delete from top_rated_films where release_year=1994 returning release_year;
 
+=============TRUNCATE Clause  (Use For Delete Record faster than delete, cant use where)================
+truncate table students ;
 =============ORDER BY Clause  (Use For Sorting Record)================ 
 
 select * from students order by age asc; //Small to Large (default)
@@ -95,17 +196,22 @@ select * from students where lname='Islam' AND age>=20;
 select * from students where lname='Islam' OR age>=20;
 select * from students where (lname='Islam' OR lname='Biswas') AND age>=20;
 
-//IS NOT
-select * from students where lname is not null;
-
-//LIKE (Searching)
-select * from students where fname like 'T%';
-
-//IN
+//IN --alternative of OR
+select * from students where lname in('Islam','Biswas') AND age>=20;
 select * from students where age in (19,21,22);
 
 //NOT IN
 select * from students where age not in (19,21,22)
+select * from students where not (age=19 or age=21 or age=22) --alternate
+
+//IS NOT
+select * from students where lname is not null;
+
+//LIKE (Searching) -- case-sensitive
+select * from students where fname like 'T%';--only T..
+
+//ILIKE (Searching) -- case-insensitive
+select * from students where fname ilike 'T%';--T..,t..
 
 //BETWEEN
 select * from students where age between 22 and 30;
@@ -154,6 +260,60 @@ select sum(salary) as total_salary from teachers;
 
 //count
 select count(*) as total_rows from teachers;
+
+==============UNION=================
+//create table
+CREATE TABLE top_rated_films(
+title VARCHAR NOT NULL,
+release_year SMALLINT
+);
+
+CREATE TABLE most_popular_films(
+title VARCHAR NOT NULL,
+release_year SMALLINT
+);
+
+INSERT INTO 
+   top_rated_films(title,release_year)
+VALUES
+   ('The Shawshank Redemption',1994),
+   ('The Godfather',1972),
+   ('12 Angry Men',1957);
+
+INSERT INTO 
+   most_popular_films(title,release_year)
+VALUES
+   ('An American Pickle',2020),
+   ('The Godfather',1972),
+   ('Greyhound',2020);
+
+//UNION operator to combine data from both tables - removes duplicate
+
+SELECT * FROM top_rated_films
+UNION
+SELECT * FROM most_popular_films;
+
+//UNION operator to combine data from both tables - does not removes duplicate
+
+SELECT * FROM top_rated_films
+UNION ALL
+SELECT * FROM most_popular_films;
+
+===//EXCEPT operator returns distinct rows from the first (left) query that is not in the output of
+the second (right) query.
+
+example-all records that are present in the categories table but that are
+not present in the tags table//====
+
+select title from categories except select tag from tags
+
+
+====//The INTERSECT operator performs the reverse operation. It searches for all the records
+present in the first table that are also present in the second table//=============
+
+select title from categories intersect select tag from tags;
+
+
 
 ============================User Defined Function=====================
 //Create Function
@@ -325,6 +485,13 @@ repeat()
 select repeat('Hi',3)
 o/p>HiHiHi
 
+coalesce() --return first not null value
+select coalesce(NULL,'test');
+o/p>test
+
+select coalesce('orange','test');
+o/p>orange
+
 ==================================Sub Query (Query within another query)===============================
 //normal query
 select * from teachers;
@@ -332,3 +499,15 @@ select * from teachers;
 //with subquery (subquery execute first then main query)
 select * from teachers where salary>(select avg(salary) from teachers);
 select * from teachers where salary in(select salary from teachers where salary>20000);
+
+=====================//CTE -Common table Expression==============
+Example:-
+//with --use to write large query
+with del_posts as (
+delete from t_posts
+where category in (select pk from categories where title
+='apple')
+returning *)
+insert into delete_posts select * from del_posts;
+
+======================Window Functions (perform the calculation across a set of rows related to the current row.)=====================
