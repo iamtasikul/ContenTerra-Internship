@@ -1,0 +1,39 @@
+A CHECK constraint is a kind of constraint that allows you to specify if values in a column must meet a specific requirement.
+you use the CHECK constraint at the time of creating the table using the CREATE TABLE statement.
+
+DROP TABLE IF EXISTS employees;
+CREATE TABLE employees (
+	id SERIAL PRIMARY KEY,
+	first_name VARCHAR (50),
+	last_name VARCHAR (50),
+	birth_date DATE CHECK (birth_date > '1900-01-01'),
+	joined_date DATE CHECK (joined_date > birth_date),
+	salary numeric CHECK(salary > 0)
+);
+
+//error
+INSERT INTO employees (first_name, last_name, birth_date, joined_date, salary)
+VALUES ('John', 'Doe', '1972-01-01', '2015-07-01', - 100000);
+
+//Define PostgreSQL CHECK constraints for existing tables
+
+CREATE TABLE prices_list (
+	id serial PRIMARY KEY,
+	product_id INT NOT NULL,
+	price NUMERIC NOT NULL,
+	discount NUMERIC NOT NULL,
+	valid_from DATE NOT NULL,
+	valid_to DATE NOT NULL
+);
+
+ALTER TABLE prices_list 
+ADD CONSTRAINT price_discount_check 
+CHECK (
+	price > 0
+	AND discount >= 0
+	AND price > discount
+);
+
+ALTER TABLE prices_list 
+ADD CONSTRAINT valid_range_check 
+CHECK (valid_to >= valid_from);

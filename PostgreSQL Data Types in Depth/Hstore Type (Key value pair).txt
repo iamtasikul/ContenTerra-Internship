@@ -1,0 +1,126 @@
+==============hstore data ================
+//Before working with the hstore data type, you need to enable the hstore extension which loads the contrib module to your PostgreSQL instance.
+
+CREATE EXTENSION hstore;
+
+//Create a table with hstore data type
+CREATE TABLE books (
+	id serial primary key,
+	title VARCHAR (255),
+	attr hstore
+);
+//insert data
+INSERT INTO books (title, attr)
+VALUES
+	(
+		'PostgreSQL Tutorial',
+		'"paperback" => "243",
+	   "publisher" => "postgresqltutorial.com",
+	   "language"  => "English",
+	   "ISBN-13"   => "978-1449370000",
+		 "weight"    => "11.2 ounces"'
+	);
+//fetching data
+SELECT
+	attr
+FROM
+	books;
+
+//Query value for a specific key
+SELECT
+	attr -> 'ISBN-13' AS isbn
+FROM
+	books;
+
+//query with where clause
+SELECT
+	title, attr -> 'weight' AS weight
+FROM
+	books
+WHERE
+	attr -> 'ISBN-13' = '978-1449370000';
+
+//Add key-value pairs to existing rows
+
+UPDATE books
+SET attr = attr || '"freeshipping"=>"yes"' :: hstore;
+
+//check added pair
+SELECT
+	title,
+        attr -> 'freeshipping' AS freeshipping
+FROM
+	books;
+
+//Remove existing key-value pair
+UPDATE books 
+SET attr = delete(attr, 'freeshipping');
+
+//check hstore column using the ? operator in the WHERE clause
+SELECT
+  title,
+  attr->'publisher' as publisher,
+  attr
+FROM
+	books
+WHERE
+	attr ? 'publisher';
+
+//Check for a key-value pair
+
+SELECT
+	title
+FROM
+	books
+WHERE
+	attr @> '"weight"=>"11.2 ounces"' :: hstore;
+
+//Query rows that contain multiple specified keys
+
+SELECT
+	title
+FROM
+	books
+WHERE
+	attr ?& ARRAY [ 'language', 'weight' ];
+
+//Get all keys from an hstore column
+SELECT
+	akeys (attr)
+FROM
+	books;
+
+//single key
+SELECT
+	skeys (attr)
+FROM
+	books;
+
+//Get all values from an hstore column
+
+SELECT
+	avals (attr)
+FROM
+	books;
+
+//single vaue
+SELECT
+	svals (attr)
+FROM
+	books;
+
+
+//Convert hstore data to JSON
+
+SELECT
+  title,
+  hstore_to_json (attr) json
+FROM
+  books;
+
+//Convert hstore data to sets
+SELECT
+	title,
+	(EACH(attr) ).*
+FROM
+	books;

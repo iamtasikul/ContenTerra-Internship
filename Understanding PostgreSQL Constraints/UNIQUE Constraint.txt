@@ -1,0 +1,48 @@
+UNIQUE constraint that maintains the uniqueness of the data correctly.
+every time you insert a new row, it checks if the value is already in the table. It rejects the change and issues an error if the value already exists. The same process is carried out for updating existing data.
+
+//create table
+CREATE TABLE person (
+	id SERIAL PRIMARY KEY,
+	first_name VARCHAR (50),
+	last_name VARCHAR (50),
+	email VARCHAR (50) UNIQUE
+);
+
+//insert data
+INSERT INTO person(first_name,last_name,email)
+VALUES('john','doe','j.doe@postgresqltutorial.com');
+
+//insert with duplicate --erro
+INSERT INTO person(first_name,last_name,email)
+VALUES('jack','doe','j.doe@postgresqltutorial.com');
+
+//UNIQUE constraint on multiple columns
+
+CREATE TABLE table (
+    c1 data_type,
+    c2 data_type,
+    c3 data_type,
+    UNIQUE (c2, c3)
+);
+
+//Adding unique constraint using a unique index
+
+//First, suppose you have a table named equipment:
+
+CREATE TABLE equipment (
+	id SERIAL PRIMARY KEY,
+	name VARCHAR (50) NOT NULL,
+	equip_id VARCHAR (16) NOT NULL
+);
+
+//Second, create a unique index based on the equip_id column.
+
+CREATE UNIQUE INDEX CONCURRENTLY equipment_equip_id 
+ON equipment (equip_id);
+
+//Third, add a unique constraint to the equipment table using the equipment_equip_id index.
+
+ALTER TABLE equipment 
+ADD CONSTRAINT unique_equip_id 
+UNIQUE USING INDEX equipment_equip_id;

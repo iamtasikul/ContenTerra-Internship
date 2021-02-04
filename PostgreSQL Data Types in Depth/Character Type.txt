@@ -1,0 +1,13 @@
+==============character type (CHAR (space does not count) , VARCHAR (space also count) , and TEXT)===================
+//creating table
+CREATE TABLE character_tests (
+	id serial PRIMARY KEY,
+	x CHAR (1),
+	y VARCHAR (2),
+	z TEXT
+);
+
+//insert data
+INSERT INTO character_tests (x, y, z) VALUES('Y','varchar(n)','This is a very long text for the PostgreSQL text column');
+
+SELECT * FROM character_tests;

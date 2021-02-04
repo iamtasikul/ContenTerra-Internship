@@ -1,0 +1,39 @@
+A foreign key is a column or a group of columns in a table that reference the primary key of another table.
+
+PostgreSQL supports the following actions:
+
+SET NULL
+SET DEFAULT
+RESTRICT
+NO ACTION
+CASCADE
+
+//The RESTRICT action is similar to the NO ACTION.
+//SET NULL
+The SET NULL automatically sets NULL to the foreign key columns in the referencing rows of the child table when the referenced rows in the parent table are deleted.
+//CASCADE
+The ON DELETE CASCADE automatically deletes all the referencing rows in the child table when the referenced rows in the parent table are deleted. I
+
+//create table
+DROP TABLE IF EXISTS customers;
+CREATE TABLE customers(
+   customer_id INT GENERATED ALWAYS AS IDENTITY,
+   customer_name VARCHAR(255) NOT NULL,
+   PRIMARY KEY(customer_id)
+);
+
+DROP TABLE IF EXISTS contacts;
+CREATE TABLE contacts(
+   contact_id INT GENERATED ALWAYS AS IDENTITY,
+   customer_id INT,
+   contact_name VARCHAR(255) NOT NULL,
+   phone VARCHAR(15),
+   email VARCHAR(100),
+   PRIMARY KEY(contact_id),
+   CONSTRAINT fk_customer
+      FOREIGN KEY(customer_id) 
+	  REFERENCES customers(customer_id)
+	  //ON DELETE SET NULL
+          //ON DELETE CASCADE
+	  //[ON UPDATE update_action (is not often used in practice. )]
+);

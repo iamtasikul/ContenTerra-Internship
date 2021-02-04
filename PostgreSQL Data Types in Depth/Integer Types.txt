@@ -1,0 +1,15 @@
+integer types: SMALLINT, INTEGER, and BIGINT.
+
+CREATE TABLE books (
+    book_id SERIAL PRIMARY KEY,
+    title VARCHAR (255) NOT NULL,
+    pages SMALLINT NOT NULL CHECK (pages > 0)
+);
+
+CREATE TABLE cities (
+    city_id serial PRIMARY KEY,
+    city_name VARCHAR (255) NOT NULL,
+    population INT NOT NULL CHECK (population >= 0) --stores large data
+);
+
+Using BIGINT type is not only consuming a lot of storage but also decreasing the performance of the database, therefore, you should have a good reason to use it.

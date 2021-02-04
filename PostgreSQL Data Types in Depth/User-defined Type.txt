@@ -1,0 +1,72 @@
+=========================User-defined Data Types===========================
+
+Besides built-in data types, PostgreSQL allows you to create user-defined data types through the following statements:
+
+CREATE DOMAIN creates a user-defined data type with constraints such as NOT NULL, CHECK, etc.
+CREATE TYPE creates a composite type used in stored procedures as the data types of returned values.
+
+################create domain
+CREATE DOMAIN contact_name AS 
+   VARCHAR NOT NULL CHECK (value !~ '\s');
+
+//adding domain
+CREATE TABLE mailing_list (
+    id serial PRIMARY KEY,
+    first_name contact_name,
+    last_name contact_name,
+    email VARCHAR NOT NULL
+);
+
+//generate error 
+INSERT INTO mailing_list (first_name, last_name, email)
+VALUES('Jame V','Doe','jame.doe@example.com');
+
+//will insert
+INSERT INTO mailing_list (first_name, last_name, email)
+VALUES('Jane','Doe','jane.doe@example.com');
+
+//remove domain
+you use the ALTER DOMAIN or DROP DOMAIN respectively.
+
+//view domain
+dbname=#\dD
+
+//getting doman information
+SELECT typname 
+FROM pg_catalog.pg_type 
+  JOIN pg_catalog.pg_namespace 
+  	ON pg_namespace.oid = pg_type.typnamespace 
+WHERE 
+	typtype = 'd' and nspname = 'public';
+
+#############create type
+
+CREATE TYPE film_summary AS (
+    film_id INT,
+    title VARCHAR,
+    release_year SMALLINT
+);
+
+//use the film_summary data type as the return type of a function:
+CREATE OR REPLACE FUNCTION get_film_summary (f_id INT) 
+    RETURNS film_summary AS 
+$$ 
+SELECT
+    film_id,
+    title,
+    release_year
+FROM
+    film
+WHERE
+    film_id = f_id ; 
+$$ 
+LANGUAGE SQL;
+
+//call the get_film_summary() function:
+SELECT * FROM get_film_summary (40);
+
+//drop type
+DROP TYPE
+
+///view type
+dvdrental=# \dT

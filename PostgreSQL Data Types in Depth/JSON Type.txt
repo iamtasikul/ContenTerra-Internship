@@ -1,0 +1,65 @@
+=========================JSON (JavaScript Object Notation)===========
+//create table
+
+CREATE TABLE orders (
+	id serial NOT NULL PRIMARY KEY,
+	info json NOT NULL
+);
+
+//Insert JSON data
+
+INSERT INTO orders (info)
+VALUES('{ "customer": "John Doe", "items": {"product": "Beer","qty": 6}}');
+
+//insert multiple data
+INSERT INTO orders (info)
+VALUES('{ "customer": "Lily Bush", "items": {"product": "Diaper","qty": 24}}'),
+      ('{ "customer": "Josh William", "items": {"product": "Toy Car","qty": 1}}'),
+      ('{ "customer": "Mary Clark", "items": {"product": "Toy Train","qty": 2}}');
+
+//Querying JSON data
+SELECT info FROM orders;
+
+//jSON operator
+The operator -> returns JSON object field by key.
+The operator ->> returns JSON object field by text.
+
+SELECT info -> 'customer' AS customer FROM orders;
+
+SELECT info ->> 'customer' AS customer FROM orders;
+
+//Use JSON operator in WHERE clause
+SELECT info ->> 'customer' AS customer
+FROM orders
+WHERE info -> 'items' ->> 'product' = 'Diaper';
+
+SELECT info ->> 'customer' AS customer,
+	info -> 'items' ->> 'product' AS product
+FROM orders
+WHERE CAST ( info -> 'items' ->> 'qty' AS INTEGER) = 2
+
+//Apply aggregate functions to JSON data
+SELECT 
+   MIN (CAST (info -> 'items' ->> 'qty' AS INTEGER)),
+   MAX (CAST (info -> 'items' ->> 'qty' AS INTEGER)),
+   SUM (CAST (info -> 'items' ->> 'qty' AS INTEGER)),
+   AVG (CAST (info -> 'items' ->> 'qty' AS INTEGER))
+FROM orders;
+
+//JSON functions
+
+//json_each()
+
+SELECT json_each (info)
+FROM orders;
+
+//json_object_keys()
+SELECT json_object_keys (info->'items')
+FROM orders;
+
+//json_typeof()
+SELECT json_typeof (info->'items')
+FROM orders;
+
+SELECT json_typeof (info->'items'->'qty')
+FROM orders;

@@ -1,0 +1,14 @@
+=====================Timestamp Data Types==================================
+timestamp: a timestamp without timezone one.
+timestamptz: timestamp with a timezone.
+
+//create table
+CREATE TABLE timestamp_demo (ts TIMESTAMP, tstz TIMESTAMPTZ);
+
+//insert data
+INSERT INTO timestamp_demo (ts, tstz) VALUES('2016-06-22 19:10:25-07','2016-06-22 19:10:25-07');
+
+//view data
+SELECT ts, tstz FROM timestamp_demo;
+
+SET timezone = 'America/New_York';

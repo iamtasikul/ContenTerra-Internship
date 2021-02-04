@@ -1,0 +1,82 @@
+===========================Array Type============================
+
+//create table
+CREATE TABLE contactsarr (
+	id serial PRIMARY KEY,
+	name VARCHAR (100),
+	phones TEXT []
+);
+
+//insert data
+INSERT INTO contactsarr (name, phones)
+VALUES('John Doe',ARRAY [ '(408)-589-5846','(408)-589-5555' ]);
+
+//using curlybrace -default
+INSERT INTO contactsarr (name, phones)
+VALUES('Lily Bush','{"(408)-589-5841"}'),
+      ('William Gate','{"(408)-589-5842","(408)-589-58423"}');
+
+//fetch data
+SELECT
+	name,
+	phones [ 1 ]
+FROM
+	contactsarr;
+
+//filter using where
+
+SELECT
+	name
+FROM
+	contactsarr
+WHERE
+	phones [ 2 ] = '(408)-589-58423';
+
+//modify array
+
+UPDATE contactsarr
+SET phones [2] = '(408)-589-5843'
+WHERE ID = 3;
+
+//modify whole array
+UPDATE contactsarr
+SET phones = '{"(408)-589-5843"}'
+WHERE id = 3;
+
+//Search in array -any()
+
+SELECT
+	name,
+	phones
+FROM
+	contactsarr
+WHERE
+	'(408)-589-5555' = ANY (phones);
+
+//Expand Arrays -unnest()
+
+SELECT
+	name,
+	unnest(phones)
+FROM
+	contactsarr;
+
+
+=================Array=================
+//create table
+create table employeearr(id int not null primary key,name text not null,salary integer[],work_hours text[][]);
+
+//insert data
+insert into employeearr values(1,'John','{20000,30000}','{{"Morning","Two"},{"Evening","Three"}}')
+into employeearr values(2,'Rahul','{10000,50000}','{{"Morning","Three"},{"Evening","Four"}}')
+
+//Fetch Data
+select * from employeearr;
+
+//Fetch data from 1d array
+select salary[2] from employeearr;
+
+//Fetch data from 2d array
+select work_hours[1][1] from employeearr;
+
+select * from employeearr where work_hours[1][2]='Two';

@@ -1,0 +1,44 @@
+A primary key is a column or a group of columns used to identify a row uniquely in a table.
+
+//create table
+CREATE TABLE po_headers (
+	po_no INTEGER PRIMARY KEY,
+	vendor_no INTEGER,
+	description TEXT,
+	shipping_address TEXT
+);
+
+//CREATE TABLE po_items (
+	po_no INTEGER,
+	item_no INTEGER,
+	product_no INTEGER,
+	qty INTEGER,
+	net_price NUMERIC,
+	PRIMARY KEY (po_no, item_no)
+);
+
+//Define primary key when changing the existing table structure
+
+CREATE TABLE products (
+	product_no INTEGER,
+	description TEXT,
+	product_cost NUMERIC
+);
+
+ALTER TABLE products 
+ADD PRIMARY KEY (product_no);
+
+//add an auto-incremented primary key to an existing table
+
+CREATE TABLE vendors (name VARCHAR(255));
+
+INSERT INTO vendors (NAME) VALUES('Microsoft'),('IBM'),('Apple'),('Samsung');
+
+SELECT * FROM vendors;
+
+ALTER TABLE vendors ADD COLUMN ID SERIAL PRIMARY KEY;
+
+SELECT id,name FROM vendors;
+
+//remove primary key
+ALTER TABLE products DROP CONSTRAINT products_pkey;

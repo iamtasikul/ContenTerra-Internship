@@ -1,0 +1,48 @@
+=======================UUID (Universal Unique Identifier defined by RFC 4122 ) Data Type============================
+
+//install the uuid-ossp module, you use the CREATE EXTENSION statement as follows:
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+SELECT uuid_generate_v1();
+SELECT uuid_generate_v4();
+
+//Creating a table with UUID column
+
+CREATE TABLE contacts (
+    contact_id uuid DEFAULT uuid_generate_v4 (),
+    first_name VARCHAR NOT NULL,
+    last_name VARCHAR NOT NULL,
+    email VARCHAR NOT NULL,
+    phone VARCHAR,
+    PRIMARY KEY (contact_id)
+);
+
+//insert data
+INSERT INTO contacts (
+    first_name,
+    last_name,
+    email,
+    phone
+)
+VALUES
+    (
+        'John',
+        'Smith',
+        'john.smith@example.com',
+        '408-237-2345'
+    ),
+    (
+        'Jane',
+        'Smith',
+        'jane.smith@example.com',
+        '408-237-2344'
+    ),
+    (
+        'Alex',
+        'Smith',
+        'alex.smith@example.com',
+        '408-237-2343'
+    );
+
+//fetching data
+SELECT * FROM contacts;

@@ -1,0 +1,14 @@
+If you use NULL instead of NOT NULL, the column will accept both NULL and non-NULL values. If you don’t explicitly specify NULL or NOT NULL, it will accept NULL by default.
+
+CREATE TABLE invoices(
+  id SERIAL PRIMARY KEY,
+  product_id INT NOT NULL,
+  qty numeric NOT NULL CHECK(qty > 0),
+  net_price numeric CHECK(net_price > 0) 
+);
+
+//Adding NOT NULL Constraint to existing columns
+
+ALTER TABLE invoices 
+ALTER COLUMN net_price
+SET NOT NULL;

@@ -31,6 +31,9 @@ DROP DATABASE school;
 //Create Table
 CREATE TABLE students(id integer not null primary key,fname text not null,lname text not null,age int not null);
 
+//plsql view table
+\dt
+
 //Create table with Primary key
 CREATE TABLE users (
 pk int GENERATED ALWAYS AS IDENTITY,
@@ -151,6 +154,9 @@ select distinct fname from students;
 ==================LIMIT =========
 select * from students LIMIT 2;
 
+===============FETCH (The FETCH clause is functionally equivalent to the LIMIT clause.)============
+select * from top_rated_films order by title fetch first 2 rows only;
+
 ===============Offset (is used to skip a specific number of rows)======
 select * from students offset 1 limit 2 ;
 
@@ -181,6 +187,8 @@ select * from students order by age desc;//Large to Small
 =============GROUP BY Clause  (Use to group rows that have the same values -  identify unique rows)================ 
 
 select name,sum(salary) from teachers group by name;
+
+
 
 =============HAVING Clause  (Use to filter grouped rows - use with group by clause)================ 
 
@@ -218,10 +226,14 @@ select * from students where age between 22 and 30;
 
 
 
-========================views (virtual table)===============
+
+========================views (does not store data, execute on run time ,virtual table)===============
+plsql check view
+\dv
 
 //create view
 create view studentview as select fname,age from students;
+create or replace view studentview as select fname,age from students;
 
 //Show View
 SELECT * FROM studentview;
@@ -229,9 +241,26 @@ SELECT * FROM studentview;
 //Delete View
 drop view studentview;
 
+==================material view (store data also use in large data, fast in remote data)======
+//plsql
+\dm
+
+//create view
+create materialized view studentmatview as select fname,age from students;
+
+//Delete View
+drop materialized view studentmatview;
+
+//fetch data
+select * from studentmatview;
+REFRESH MATERIALIZED VIEW studentmatview;
 =================Join============================
-//inner join (Join Common)
+//Natural Join (no duplicate columns)
+select * from top_rated_films natural join most_popular_films;
+
+//inner join (Join Common --show duplicate colums also)
 select students.fname,students.lname,teachers.name from students inner join teachers on students.id=teachers.id;
+select * from top_rated_films as t inner join most_popular_films as m on t.release_year=m.release_year; 
 
 //left join (join left table all rows (here students) with right table matching rows)
 select students.fname,students.age,teachers.name from students left join teachers on students.id=teachers.id;
@@ -393,24 +422,7 @@ explain select * from test where first_name='Ahmed';
 //Drop Index
 drop index emp_index;
 
-=================Array=================
-//create table
-create table employeearr(id int not null primary key,name text not null,salary integer[],work_hours text[][]);
 
-//insert data
-insert into employeearr values(1,'John','{20000,30000}','{{"Morning","Two"},{"Evening","Three"}}')
-into employeearr values(2,'Rahul','{10000,50000}','{{"Morning","Three"},{"Evening","Four"}}')
-
-//Fetch Data
-select * from employeearr;
-
-//Fetch data from 1d array
-select salary[2] from employeearr;
-
-//Fetch data from 2d array
-select work_hours[1][1] from employeearr;
-
-select * from employeearr where work_hours[1][2]='Two';
 
 ==========================Enum (User Defined Data type)============
 //Create Type
@@ -430,15 +442,6 @@ select * from person;
 //fetch records on index
 select min(current_mood) from person;
 
-
-
-==============================Check Constraint (condition that check automatically)==========================
-//create table
-create table checktable(roll_no integer check(roll_no>1000),name text not null)
-
-//insert record
-insert into checktable values(10,'John') (Error)
-insert into checktable values(1001,'John') (Success)
 
 ==============================String Function==========================
 || (Combine)
