@@ -1,0 +1,27 @@
+The ALL operator returns TRUE if all of the subquery values meet the condition.
+
+The following SQL statement returns TRUE and lists the product names if ALL the records in the OrderDetails table has quantity = 10 (so, this example will return FALSE, because not ALL records in the OrderDetails table has quantity = 10):
+
+SELECT ProductName
+FROM Products
+WHERE ProductID = ALL (SELECT ProductID FROM OrderDetails WHERE Quantity = 10);
+
+find all films whose lengths are greater than the list of the average lengths above, you use the ALL and greater than operator (>) as follows:
+
+SELECT
+    film_id,
+    title,
+    length
+FROM
+    film
+WHERE
+    length > ALL (
+            SELECT
+                ROUND(AVG (length),2)
+            FROM
+                film
+            GROUP BY
+                rating
+    )
+ORDER BY
+    length;

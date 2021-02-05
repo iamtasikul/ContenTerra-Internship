@@ -1,0 +1,66 @@
+https://www.w3schools.com/sql/sql_any_all.asp
+
+The PostgreSQL ANY operator compares a value to a set of values returned by a subquery. The following illustrates the syntax of  the ANY operator
+
+expresion operator ANY(subquery)
+
+The ANY operator must be preceded by one of the following comparison operator =, <=, >, <, > and <>
+
+You can use this query as a subquery in the following statement that finds the films whose lengths are greater than or equal to the maximum length of any film category :
+
+The ANY and ALL operators are used with a WHERE or HAVING clause.
+
+The ANY operator returns true if any of the subquery values meet the condition.
+
+
+SELECT title
+FROM film
+WHERE length >= ANY(
+    SELECT MAX( length )
+    FROM film
+    INNER JOIN film_category USING(film_id)
+    GROUP BY  category_id );
+
+
+ANY vs. IN
+The = ANY is equivalent to IN operator.
+
+The following example gets the film whose category is either Action or Drama.
+
+SELECT
+    title,
+    category_id
+FROM
+    film
+INNER JOIN film_category
+        USING(film_id)
+WHERE
+    category_id = ANY(
+        SELECT
+            category_id
+        FROM
+            category
+        WHERE
+            NAME = 'Action'
+            OR NAME = 'Drama'
+    );
+
+The following statement uses the IN operator which produces the same result:
+
+SELECT
+    title,
+    category_id
+FROM
+    film
+INNER JOIN film_category
+        USING(film_id)
+WHERE
+    category_id IN(
+        SELECT
+            category_id
+        FROM
+            category
+        WHERE
+            NAME = 'Action'
+            OR NAME = 'Drama'
+    );

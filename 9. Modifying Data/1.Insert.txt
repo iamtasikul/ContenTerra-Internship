@@ -1,0 +1,25 @@
+//Insert Record Into Table
+INSERT INTO students(id,fname,lname,age) values(1,'Tasikul','Islam',24);
+
+//insert Multiple row
+INSERT INTO students values(2,'John','Doe',42),(3,'Russel','Burnson',36);
+
+The INSERT statement also has an optional RETURNING clause that returns the information of the inserted row.
+
+If you want to return the entire inserted row, you use an asterisk (*) after the RETURNING keyword:
+
+INSERT INTO table_name(column1, column2, …)
+VALUES (value1, value2, …)
+RETURNING *;
+
+
+//Inserting character string that contains a single quote
+
+If you want to insert a string that contains a single quote (') such as O'Reilly Media, you have to use an additional single quote (') to escape it. For example:
+
+INSERT INTO links (url, name)
+VALUES('http://www.oreilly.com','O''Reilly Media');
+
+//Inserting a date value
+INSERT INTO links (url, name, last_update)
+VALUES('https://www.google.com','Google','2013-06-01');

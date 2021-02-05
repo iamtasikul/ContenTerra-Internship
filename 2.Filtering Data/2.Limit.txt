@@ -1,0 +1,11 @@
+==================LIMIT =========
+LIMIT is an optional clause of the SELECT statement that constrains the number of rows returned by the query.
+
+//LIMIT to constrain the number of returned rows
+select * from students LIMIT 2;
+
+// LIMIT with OFFSET (row_to_skip) example
+select * from students offset 1 limit 2 ;
+
+//LIMIT OFFSSET to get top / bottom N rows
+select * from students order by fname desc offset 1 limit 2 ;

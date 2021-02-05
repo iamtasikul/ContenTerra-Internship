@@ -1,0 +1,26 @@
+A common table expression is a temporary result set which you can reference within another SQL statement including SELECT, INSERT, UPDATE or DELETE.
+
+Common Table Expressions are temporary in the sense that they only exist during the execution of the query.
+
+The following shows the syntax of creating a CTE:
+
+WITH cte_name (column_list) AS (
+    CTE_query_definition 
+)
+statement;
+
+
+//Joining a CTE with a table example
+
+WITH cte_rental AS (
+    SELECT staff_id,
+        COUNT(rental_id) rental_count
+    FROM   rental
+    GROUP  BY staff_id
+)
+SELECT s.staff_id,
+    first_name,
+    last_name,
+    rental_count
+FROM staff s
+    INNER JOIN cte_rental USING (staff_id);

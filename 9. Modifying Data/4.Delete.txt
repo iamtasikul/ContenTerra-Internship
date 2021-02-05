@@ -1,0 +1,6 @@
+=============DELETE Clause  (Use For Delete Record)================
+
+DELETE FROM students WHERE fname='John';
+DELETE FROM students
+delete from temp_categories ;--delete  all records
+delete from top_rated_films where release_year=1994 returning release_year;

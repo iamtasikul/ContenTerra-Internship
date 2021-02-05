@@ -1,0 +1,9 @@
+=============TRUNCATE Clause  (Use For Delete Record faster than delete, cant use where)================
+
+truncate table students ;
+
+TRUNCATE TABLE invoices 
+RESTART IDENTITY;
+
+//remove all data from a table that has foreign key references
+TRUNCATE TABLE invoices CASCADE;

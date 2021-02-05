@@ -1,0 +1,28 @@
+=============SELECT Clause ================
+
+//query data from one column
+select fname students;
+
+//query data from multiple columns
+select id,fname as firstName,lname from students;
+
+//query data from all columns
+select * from students;
+
+//SELECT statement with expressions example
+SELECT fname || ' ' || lname,email FROM customer;
+
+//math calculation
+SELECT 5 * 3;
+
+
+The SELECTstatement has the following clauses:
+
+Select distinct rows using DISTINCT operator.
+Sort rows usingORDER BY clause.
+Filter rows using WHERE clause.
+Select a subset of rows from a table using LIMIT or FETCH clause.
+Group rows into groups using GROUP BY clause.
+Filter groups using HAVING clause.
+Join with other tables using joins such as INNER JOIN, LEFT JOIN, FULL OUTER JOIN, CROSS JOIN clauses.
+Perform set operations using UNION, INTERSECT, and EXCEPT.

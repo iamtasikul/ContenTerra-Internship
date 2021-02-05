@@ -1,0 +1,16 @@
+EXISTS operator to test for existence of rows in a subquery.
+
+//Find customers who have at least one payment whose amount is greater than 11
+
+SELECT first_name,
+       last_name
+FROM customer c
+WHERE EXISTS
+    (SELECT 1
+     FROM payment p
+     WHERE p.customer_id = c.customer_id
+       AND amount > 11 )
+ORDER BY first_name,
+         last_name;
+
+In this example, for each customer in the customer table, the subquery checks the payment table to find if that customer made at least one payment (p.customer_id = c.customer_id) and the amount is greater than 11 ( amount > 11)

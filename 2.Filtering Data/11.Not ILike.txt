@@ -1,0 +1,15 @@
+//NOT ILIKE (Searching except this) -- case-insensitive
+
+Operator	Equivalent
+!~~*	        NOT ILIKE
+
+any single character (_)
+any number of characters (%)
+
+select * from students where fname not ilike 'T%'; -- Tashjoiytfcjtfn,-- tashjoiytfcjtfn
+select * from students where fname not ilike 'Tas'; -- Tas, -- tas
+select * from students where fname not ilike '_s_'; --bsa
+select * from students where fname not ilike '_s%'; --tsnkkihfdv
+
+//It’s possible to use wildcards at the beginning and/or end of the pattern.
+select * from students where fname not ilike '%s%'; --gfdehgrcvbsoiytrfvb 

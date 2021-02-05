@@ -1,0 +1,2 @@
+//check if a value is out of a range
+select * from students where age not between 22 and 30;

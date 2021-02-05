@@ -1,0 +1,40 @@
+To copy a table completely, including both table structure and data
+
+CREATE TABLE new_table AS 
+TABLE existing_table;
+
+//copy a table structure without data,
+CREATE TABLE new_table AS 
+TABLE existing_table 
+WITH NO DATA;
+
+======Example
+
+CREATE TABLE contacts(
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR NOT NULL,
+    last_name VARCHAR NOT NULL,
+    email VARCHAR NOT NULL UNIQUE
+);
+
+INSERT INTO contacts(first_name, last_name, email) 
+VALUES('John','Doe','john.doe@postgresqltutorial.com'),
+      ('David','William','david.william@postgresqltutorial.com');
+
+//Copy Table
+
+CREATE TABLE contact_backup 
+AS TABLE contacts;
+
+//Querying Copy Table Data
+SELECT * FROM contact_backup;
+
+
+//To add the primary key and UNIQUE constraints to the contact_backup table, you use the following ALTER TABLE statements:
+
+ALTER TABLE contact_backup ADD PRIMARY KEY(id);
+ALTER TABLE contact_backup ADD UNIQUE(email);
+
+To view structure of the contact_backup table again, you use \d command:
+
+test=# \d contact_backup;

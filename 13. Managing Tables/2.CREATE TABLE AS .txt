@@ -1,0 +1,24 @@
+The CREATE TABLE AS statement creates a new table and fills it with the data returned by a query
+
+//Example
+CREATE TABLE action_film AS
+SELECT
+    film_id,
+    title,
+    release_year,
+    length,
+    rating
+FROM
+    film
+INNER JOIN film_category USING (film_id)
+WHERE
+    category_id = 1;
+
+
+//To verify the table creation, you can query data from the action_film table:
+SELECT * FROM action_film
+ORDER BY title;
+
+To check the structure of the action_film, you can use the following command in the psql tool:
+
+\d action_film;

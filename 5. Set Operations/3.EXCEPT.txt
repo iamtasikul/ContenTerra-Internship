@@ -1,0 +1,41 @@
+===//EXCEPT operator returns distinct rows from the first (left) query that is not in the output of
+the second (right) query.
+
+example-all records that are present in the categories table but that are
+not present in the tags table//====
+
+select title from categories except select tag from tags
+
+
+//create table
+CREATE TABLE top_rated_films(
+title VARCHAR NOT NULL,
+release_year SMALLINT
+);
+
+CREATE TABLE most_popular_films(
+title VARCHAR NOT NULL,
+release_year SMALLINT
+);
+
+//insert data
+
+INSERT INTO 
+   top_rated_films(title,release_year)
+VALUES
+   ('The Shawshank Redemption',1994),
+   ('The Godfather',1972),
+   ('12 Angry Men',1957);
+
+INSERT INTO 
+   most_popular_films(title,release_year)
+VALUES
+   ('An American Pickle',2020),
+   ('The Godfather',1972),
+   ('Greyhound',2020);
+
+//Querying Data
+
+SELECT * FROM top_rated_films
+EXCEPT 
+SELECT * FROM most_popular_films;

@@ -1,0 +1,26 @@
+
+//IN --alternative of OR
+You use IN operator in the WHERE clause to check if a value matches any value in a list of values.
+
+select * from students where lname in('Islam','Biswas') AND age>=20;
+select * from students where age in (19,21,22);
+select * from students where lname in('Islam','Biswas','Doe');
+
+The following query uses the equal (=) and OR operators instead of the IN operator. 
+
+//using OR
+//OR (execute when any one or both Condition is true)
+select * from students where lname='Islam' OR age>=20;
+select * from students where age = 19 OR age = 21 OR age = 22;
+select * from students where (lname='Islam' OR lname='Biswas') AND age>=20;
+
+//IN with a subquery
+
+SELECT customer_id,first_name,last_name FROM customer WHERE customer_id IN (SELECT customer_id FROM rental WHERE CAST (return_date AS DATE) = '2005-05-27') ORDER BY customer_id;
+
+Note that The CAST() function converts a value (of any type) into a specified datatype.
+
+Example
+Convert a value to an int datatype:
+
+SELECT CAST(25.65 AS int);

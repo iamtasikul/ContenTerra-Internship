@@ -1,0 +1,15 @@
+====================Alias(as)-Temporary Name===================
+giving temporary name to a column
+The AS keyword is optional.
+
+//column alias to a column
+SELECT lname AS surname FROM students;
+
+//column alias to an expression
+SELECT fname || ' ' || lname AS full_name FROM students;
+
+// Column aliases that contain spaces
+SELECT fname || ' ' || lname AS "full_name" FROM students;
+
+//more example
+select s.fname,t.name from students as s,teachers as t where s.id=t.id;

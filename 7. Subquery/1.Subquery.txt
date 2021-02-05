@@ -1,0 +1,7 @@
+==================================Sub Query (Query within another query)===============================
+//normal query
+select * from teachers;
+
+//with subquery (subquery execute first then main query)
+select * from teachers where salary>(select avg(salary) from teachers);
+select * from teachers where salary in(select salary from teachers where salary>20000);

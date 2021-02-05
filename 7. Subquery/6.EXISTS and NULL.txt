@@ -1,0 +1,14 @@
+If the subquery returns NULL, EXISTS returns true. See the following example:
+
+SELECT
+	first_name,
+	last_name
+FROM
+	customer
+WHERE
+	EXISTS( SELECT NULL )
+ORDER BY
+	first_name,
+	last_name;
+
+In this example, the subquery returned NULL, therefore, the query returned all rows from the customer table.

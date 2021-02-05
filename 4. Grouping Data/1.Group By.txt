@@ -1,0 +1,7 @@
+=============GROUP BY Clause  (Use to group rows that have the same values -  identify unique rows)================ 
+
+//Group By – divide rows into groups and applies an aggregate function sum(),count() on each.
+//PostgreSQL evaluates the GROUP BY clause after the FROM and WHERE clauses and before the HAVING SELECT, DISTINCT, ORDER BY and LIMIT clauses.
+
+//example
+select name,sum(salary) from teachers group by name;

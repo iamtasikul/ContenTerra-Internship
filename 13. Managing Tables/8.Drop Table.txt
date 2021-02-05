@@ -1,0 +1,37 @@
+//Drop table
+DROP TABLE IF EXISTS author;
+
+Drop a table that has dependent objects
+The following creates new tables called authors and pages:
+
+CREATE TABLE authors (
+	author_id INT PRIMARY KEY,
+	firstname VARCHAR (50),
+	lastname VARCHAR (50)
+);
+
+CREATE TABLE pages (
+	page_id serial PRIMARY KEY,
+	title VARCHAR (255) NOT NULL,
+	contents TEXT,
+	author_id INT NOT NULL,
+	FOREIGN KEY (author_id) 
+          REFERENCES authors (author_id)
+);
+Code language: SQL (Structured Query Language) (sql)
+The following statement uses the DROP TABLE to drop the authortable:
+
+DROP TABLE IF EXISTS authors;
+
+Because the constraint on the page table depends on the authortable, PostgreSQL issues an error message:
+
+ERROR:  cannot drop table authors because other objects depend on it
+
+In this case, you need to remove all dependent objects first before dropping the author table or use CASCADE option as follows:
+
+DROP TABLE authors CASCADE;
+
+PostgreSQL removes the authortable as well as the constraint in the page table.
+
+//Drop multiple tables
+DROP TABLE tvshows, animes;

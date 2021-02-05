@@ -1,0 +1,8 @@
+===============FETCH (The FETCH clause is functionally equivalent to the LIMIT clause.)============
+
+FETCH vs. LIMIT
+The FETCH clause is functionally equivalent to the LIMIT clause. If you plan to make your application compatible with other database systems, you should use the FETCH clause because it follows the standard SQL.
+
+////////Example\\\\\\\\
+select * from top_rated_films order by title fetch first 1 row only;
+select * from top_rated_films order by title fetch first 2 row only;

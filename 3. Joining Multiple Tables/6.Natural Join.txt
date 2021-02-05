@@ -1,0 +1,52 @@
+//Natural Join – join two or more tables using implicit join condition based on the common column names in the joined tables.
+no duplicate columns.
+
+//Syntax
+SELECT select_list
+FROM T1
+NATURAL [INNER, LEFT, RIGHT] JOIN T2;
+
+//A natural join can be an inner join, left join, or right join. If you do not specify a join explicitly e.g., INNER JOIN, LEFT JOIN, RIGHT JOIN, PostgreSQL will use the INNER JOIN by default.
+
+//Create Tables
+
+DROP TABLE IF EXISTS categories;
+CREATE TABLE categories (
+	category_id serial PRIMARY KEY,
+	category_name VARCHAR (255) NOT NULL
+);
+
+DROP TABLE IF EXISTS products;
+CREATE TABLE products (
+	product_id serial PRIMARY KEY,
+	product_name VARCHAR (255) NOT NULL,
+	category_id INT NOT NULL,
+	FOREIGN KEY (category_id) REFERENCES categories (category_id)
+);
+
+//Insert Data
+
+INSERT INTO categories (category_name)
+VALUES
+	('Smart Phone'),
+	('Laptop'),
+	('Tablet');
+
+INSERT INTO products (product_name, category_id)
+VALUES
+	('iPhone', 1),
+	('Samsung Galaxy', 1),
+	('HP Elite', 2),
+	('Lenovo Thinkpad', 2),
+	('iPad', 3),
+	('Kindle Fire', 3);
+
+
+//Natural Join
+SELECT * FROM products
+NATURAL JOIN categories;
+
+//The above statement is equivalent to the following statement that uses the INNER JOIN clause.
+
+SELECT	* FROM products
+INNER JOIN categories USING (category_id);

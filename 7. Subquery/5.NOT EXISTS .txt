@@ -1,0 +1,14 @@
+The NOT operator negates the result of the EXISTS operator. The NOT EXISTS is opposite to EXISTS. It means that if the subquery returns no row, the NOT EXISTS returns true. If the subquery returns one or more rows, the NOT EXISTS returns false.
+
+The following example returns customers have not made any payment that greater than 11.
+
+SELECT first_name,
+       last_name
+FROM customer c
+WHERE NOT EXISTS
+    (SELECT 1
+     FROM payment p
+     WHERE p.customer_id = c.customer_id
+       AND amount > 11 )
+ORDER BY first_name,
+         last_name;

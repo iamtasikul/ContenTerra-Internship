@@ -1,0 +1,20 @@
+A temporary table, as its named implied, is a short-lived table that exists for the duration of a database session. PostgreSQL automatically drops the temporary tables at the end of a session or a transaction.
+
+create a temporary table named mytemp as follows:
+
+test=# CREATE TEMP TABLE mytemp(c INT);
+CREATE TABLE
+test=# SELECT * FROM mytemp;
+
+Then, launch another session that connects to the test database and query data from the mytemp table:
+
+test=# SELECT * FROM mytemp;
+ERROR:  relation "mytemp" does not exist
+LINE 1: SELECT * FROM mytemp;
+
+//After that, quit all the sessions:
+
+test=# \q
+
+//Removing a PostgreSQL temporary table
+DROP TABLE temp_table_name;

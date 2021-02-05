@@ -1,0 +1,10 @@
+===============DISTINCT (remove duplicate)=========
+
+//distinct in single column
+select distinct fname from students;
+
+//specify multiple columns
+select distinct fname,lname from students;
+
+//distinct on specific column from multiple columns--only fname
+select distinct on (fname) as "first name",lname from students;

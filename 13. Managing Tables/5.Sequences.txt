@@ -1,0 +1,72 @@
+//sequence is a ordered list of integers
+
+//Creating an ascending sequence example
+CREATE SEQUENCE mysequence
+INCREMENT 5
+START 100;
+
+//To get the next value from the sequence to you use the nextval() function:
+SELECT nextval('mysequence');
+
+// Creating a descending sequence example
+
+CREATE SEQUENCE three
+INCREMENT -1
+MINVALUE 1 
+MAXVALUE 3
+START 3
+CYCLE;
+
+SELECT nextval('three');
+
+//Creating a sequence associated with a table column
+First, create a new table named order_details:
+
+CREATE TABLE order_details(
+    order_id SERIAL,
+    item_id INT NOT NULL,
+    item_text VARCHAR NOT NULL,
+    price DEC(10,2) NOT NULL,
+    PRIMARY KEY(order_id, item_id)
+);
+Code language: SQL (Structured Query Language) (sql)
+Second, create a new sequence associated with the item_id column of the order_details table:
+
+CREATE SEQUENCE order_item_id
+START 10
+INCREMENT 10
+MINVALUE 10
+OWNED BY order_details.item_id;
+Code language: SQL (Structured Query Language) (sql)
+Third, insert three order line items into the order_details table:
+
+INSERT INTO 
+    order_details(order_id, item_id, item_text, price)
+VALUES
+    (100, nextval('order_item_id'),'DVD Player',100),
+    (100, nextval('order_item_id'),'Android TV',550),
+    (100, nextval('order_item_id'),'Speaker',250);
+Code language: SQL (Structured Query Language) (sql)
+In this statement, we used the nextval() function to fetch item id value from the order_item_id sequence.
+
+Fourth, query data from the order_details table:
+
+SELECT
+    order_id,
+    item_id,
+    item_text,
+    price
+FROM
+    order_details; 
+
+
+//Listing all sequences in a database
+SELECT
+    relname sequence_name
+FROM 
+    pg_class 
+WHERE 
+    relkind = 'S';
+
+//Delete Sequence
+DROP SEQUENCE IF EXISTS order_item_id;

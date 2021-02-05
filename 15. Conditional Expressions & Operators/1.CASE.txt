@@ -1,0 +1,42 @@
+The PostgreSQL CASE expression is the same as IF/ELSE statement in other programming languages. It allows you to add if-else logic to the query to form a powerful query.
+
+Since CASE is an expression, you can use it in any places where an expression can be used e.g.,SELECT, WHERE, GROUP BY, and HAVING clause.
+
+//CASE Example
+SELECT title,
+       length,
+       CASE
+           WHEN length> 0
+                AND length <= 50 THEN 'Short'
+           WHEN length > 50
+                AND length <= 120 THEN 'Medium'
+           WHEN length> 120 THEN 'Long'
+       END duration
+FROM film
+ORDER BY title;
+
+Note that we placed a column alias duration after the CASE expression.
+
+//Case with aggregate function
+SELECT
+	SUM (CASE
+               WHEN rental_rate = 0.99 THEN 1
+	       ELSE 0
+	      END
+	) AS "Economy",
+	SUM (
+		CASE
+		WHEN rental_rate = 2.99 THEN 1
+		ELSE 0
+		END
+	) AS "Mass",
+	SUM (
+		CASE
+		WHEN rental_rate = 4.99 THEN 1
+		ELSE 0
+		END
+	) AS "Premium"
+FROM
+	film;
+
+In this example, we used the CASE expression to return 1 or 0 if the rental rate falls into each price segment. And we applied the SUM function to calculate the total of films for each price segment.

@@ -1,0 +1,22 @@
+SELECT INTO statement creates a new table and inserts data returned from a query into the table.
+
+Unlike a regular SELECT statement, the SELECT INTO statement does not return a result to the client.
+
+statement creates a new table called film_r that contains films with the rating R and rental duration 5 days from the film table.
+
+SELECT
+    film_id,
+    title,
+    rental_rate
+INTO TABLE film_r
+FROM
+    film
+WHERE
+    rating = 'R'
+AND rental_duration = 5
+ORDER BY
+    title;
+Code language: SQL (Structured Query Language) (sql)
+To verify the table creation, you can query data from the film_r table:
+
+SELECT * FROM film_r;

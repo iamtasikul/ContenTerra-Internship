@@ -1,0 +1,9 @@
+=============ORDER BY Clause  (Use For Sorting Record)================ 
+
+The ORDER BY clause allows you to sort rows returned by a SELECT clause in ascending or descending order based on a sort expression.
+
+select * from students order by age asc; //Small to Large (default)
+select * from students order by age desc;//Large to Small
+
+//ORDER BY clause to sort rows by expressions
+SELECT fname,LENGTH(fname) len FROM students ORDER BY len DESC;

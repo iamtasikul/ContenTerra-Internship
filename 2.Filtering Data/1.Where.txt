@@ -1,0 +1,48 @@
+=============WHERE Clause  (Use For Condition)================
+WHERE clause, you use comparison and logical operators:
+
+Operator	Description
+=	Equal
+>	Greater than
+<	Less than
+>=	Greater than or equal
+<=	Less than or equal
+<> or !=	Not equal
+AND	Logical operator AND
+OR	Logical operator OR
+IN	Return true if a value matches any value in a list
+BETWEEN	Return true if a value is between a range of values
+LIKE	Return true if a value matches a pattern
+IS NULL	Return true if a value is NULL
+NOT	Negate the result of other operators
+
+============//Example\\====================
+select * from students where age>=30;
+
+//WHERE clause with the AND operator 
+select * from students where lname='Islam' AND age>=20;
+
+//WHERE clause with the OR operator
+select * from students where lname='Islam' OR age>=20;
+
+//WHERE clause with the IN operator 
+select * from students where lname in('Islam','Biswas','Doe');
+
+//WHERE clause with the LIKE operator
+select * from students where lname like 'I%';
+
+The % is called a wildcard that matches any string. The 'I%' pattern matches any string that starts with 'I'.
+
+//WHERE clause with the BETWEEN operator
+SELECT fname,LENGTH(fname) name_length FROM students WHERE fname LIKE 'I%' AND LENGTH(fname) BETWEEN 3 AND 5 ORDER BY name_length;
+
+The BETWEEN operator returns true if a value is in a range of values.
+
+In this example, we used the LENGTH() function gets the number of characters of an input string.
+
+//WHERE clause with the not equal operator (<>) 
+
+SELECT fname, lname FROM students WHERE fname LIKE 'I%' AND lname <> 'Biswas';
+
+Note that you can use the != operator and <> operator interchangeably because they are equivalent.
+

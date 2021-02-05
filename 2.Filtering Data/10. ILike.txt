@@ -1,0 +1,11 @@
+//ILIKE (Searching) -- case-insensitive
+
+Operator	Equivalent
+~~*	        ILIKE
+select * from students where fname ilike 'T%'; --T..,t..
+select * from students where fname ilike 'Tas'; -- Tas,-- tas
+select * from students where fname ilike '_s_'; --bsa
+select * from students where fname ilike '_s%'; --tsnkkihfdv
+
+//It’s possible to use wildcards at the beginning and/or end of the pattern.
+select * from students where fname ilike '%s%'; --gfdehgrcvbsoiytrfvb 

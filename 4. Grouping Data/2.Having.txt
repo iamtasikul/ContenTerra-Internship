@@ -1,0 +1,6 @@
+=============HAVING Clause  (Use to filter grouped rows - use with group by clause)================ 
+
+//HAVING vs. WHERE
+The WHERE clause allows you to filter rows based on a specified condition. However, the HAVING clause allows you to filter groups of rows according to a specified condition.
+
+select name from teachers group by name having count(name)>1;

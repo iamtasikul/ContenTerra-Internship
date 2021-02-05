@@ -1,0 +1,66 @@
+PostgreSQL provides you with many actions:
+
+Add a column
+Drop a column
+Change the data type of a column
+Rename a column
+Set a default value for the column.
+Add a constraint to a column.
+Rename a table
+
+
+Let’s create a new table calledlinks for practicing with the ALTER TABLE statement.
+
+DROP TABLE IF EXISTS links;
+
+CREATE TABLE links (
+   link_id serial PRIMARY KEY,
+   title VARCHAR (512) NOT NULL,
+   url VARCHAR (1024) NOT NULL
+);
+Code language: SQL (Structured Query Language) (sql)
+To add a new column named active, you use the following statement:
+
+ALTER TABLE links
+ADD COLUMN active boolean;
+Code language: SQL (Structured Query Language) (sql)
+The following statement removes the activecolumn from the linkstable:
+
+ALTER TABLE links 
+DROP COLUMN active;
+Code language: SQL (Structured Query Language) (sql)
+To change the name of the title column to link_title, you use the following statement:
+
+ALTER TABLE links 
+RENAME COLUMN title TO link_title;
+Code language: SQL (Structured Query Language) (sql)
+The following statement adds a new column named targetto the linkstable:
+
+ALTER TABLE links 
+ADD COLUMN target VARCHAR(10);
+Code language: SQL (Structured Query Language) (sql)
+To set _blank as the default value for the targetcolumn in the linkstable, you use the following statement:
+
+ALTER TABLE links 
+ALTER COLUMN target
+SET DEFAULT '_blank';
+
+//adds a CHECKcondition to the targetcolumn so that the targetcolumn only accepts the following values: _self, _blank, _parent, and _top:
+
+ALTER TABLE links 
+ADD CHECK (target IN ('_self', '_blank', '_parent', '_top'));
+
+//adds a UNIQUE constraint to the url column of the links table:
+
+ALTER TABLE links 
+ADD CONSTRAINT unique_url UNIQUE ( url );
+
+//changes the name of the  table:
+
+ALTER TABLE links 
+RENAME TO urls;
+
+//To change the data type of the name column to VARCHAR, you use the following statement:
+
+ALTER TABLE assets 
+ALTER COLUMN name TYPE VARCHAR;

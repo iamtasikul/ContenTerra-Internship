@@ -1,0 +1,7 @@
+//NOT IN
+select * from students where age not in (19,21,22)
+select * from students where not (age=19 or age=21 or age=22) --alternate
+
+Similar to the IN operator, you can use the not equal (<>) and AND operators to write the NOT IN operator:
+
+select * from students where age <> 19 AND age <> 21 AND age <> 22;

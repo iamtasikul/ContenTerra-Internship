@@ -1,0 +1,15 @@
+//LIKE (Searching) -- case-sensitive
+
+Operator	Equivalent
+~~	        LIKE
+
+any single character (_)
+any number of characters (%)
+
+select * from students where fname like 'T%'; -- Tashjoiytfcjtfn
+select * from students where fname like 'Tas'; -- Tas
+select * from students where fname like '_s_'; --bsa
+select * from students where fname like '_s%'; --tsnkkihfdv
+
+//It’s possible to use wildcards at the beginning and/or end of the pattern.
+select * from students where fname like '%s%'; --gfdehgrcvbsoiytrfvb 

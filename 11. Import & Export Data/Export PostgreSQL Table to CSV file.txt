@@ -1,0 +1,15 @@
+ export the data of the persons table to a CSV file named persons_db.csv in the C:\tmp folder, you can use the following statement:
+
+COPY persons TO 'C:\tmp\persons_db.csv' DELIMITER ',' CSV HEADER;
+
+In some cases, you want to export data from just some columns of a table to a CSV file. To do this, you specify the column names together with table name after COPY keyword. For example, the following statement exports data from the first_name, last_name, and email  columns of the persons table to person_partial_db.csv
+
+COPY persons(first_name,last_name,email) 
+TO 'C:\tmp\persons_partial_db.csv' DELIMITER ',' CSV HEADER;
+
+//copy without header
+COPY persons(email) 
+TO 'C:\tmp\persons_email_db.csv' DELIMITER ',' CSV;
+
+//Export data from a table to CSV file using the \copy command
+\copy (SELECT * FROM persons) to 'C:\tmp\persons_client.csv' with csv

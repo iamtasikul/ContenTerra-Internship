@@ -1,0 +1,15 @@
+First, launch the pgAdmin tool and connect to the PostgreSQL server.
+
+Second, right click the Databases and select the Create > Database… menu option.
+
+Third, enter the database name dvdrental and click the Save button.
+
+You’ll see the new empty database created under the Databases node.
+
+Fourth, right-click on the dvdrental database and choose Restore… menu item to restore the database
+
+Choose Filename from Dropdown (dvdrental.tar) and click the Restore button.
+
+Sixth, the restoration process will complete in few seconds and shows the following dialog once it completes.
+
+Finally, open the dvdrental database from object browser panel, you will find tables in the public schema.

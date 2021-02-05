@@ -1,0 +1,25 @@
+Open SQL Shell (psql)
+
+Second, enter the account’s information to log in to the PostgreSQL database server.
+
+Third, enter the following CREATE DATABASE statement to create a new dvdrental database.
+
+CREATE DATABASE dvdrental;
+
+Finally, enter the exit command to quit psql.
+
+Then, navigate the bin folder of the PostgreSQL installation folder:
+
+C:\>cd C:\Program Files\PostgreSQL\12\bin
+
+After that, use the pg_restore tool to load data into the dvdrental database:
+
+pg_restore -U postgres -d dvdrental C:\sampledb\dvdrental.tar
+
+In this command:
+
+The -U postgres specifies the postgresuser to login to the PostgreSQL database server.
+The -d dvdrental specifies the target database to load.
+Finally, enter the password for the postgres user and press enter
+
+It takes about seconds to load data stored in the dvdrental.tar file into the dvdrentaldatabase.
