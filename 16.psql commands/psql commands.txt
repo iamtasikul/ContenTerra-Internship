@@ -1,0 +1,61 @@
+//Switch connection to a new database
+\c dbname 
+
+//List available databases
+\l
+
+//List available tables
+\dt
+
+//Describe a table
+\d table_name
+
+//List available schema
+\dn
+
+//List available functions
+\df
+
+//List available views
+\dv
+
+//List available materialized view
+\dm
+
+//retrieve the current version of PostgreSQL server
+SELECT version();
+
+//retype previous command again
+\g
+
+//Command history
+\s
+
+//save the command history to a file
+\s filename
+
+//Execute psql commands from a file
+\i filename
+
+//Get help on psql commands
+\?
+
+//Turn on query execution time
+\timing
+You use the same command \timing to turn it off.
+
+//Edit command in your own editor
+in psql, you \e command. After issuing the command, psql will open the text editor defined by your EDITOR environment variable and place the most recent command that you entered in psql into the editor.
+
+After you type the command in the editor, save it, and close the editor, psql will execute the command and return the result.
+
+It is more useful when you edit a function in the editor.
+
+\ef [function name]
+
+//Switch output options
+ \a command switches from aligned to non-aligned column output.
+ \H command formats the output to HTML format.
+
+//Quit psql
+\q

@@ -1,0 +1,56 @@
+Preparing sample data
+First, create a new table named basket that stores fruits:
+
+CREATE TABLE basket(
+    id SERIAL PRIMARY KEY,
+    fruit VARCHAR(50) NOT NULL
+);
+Code language: PostgreSQL SQL dialect and PL/pgSQL (pgsql)
+Second, insert some fruits into the basket table.
+
+INSERT INTO basket(fruit) values('apple');
+INSERT INTO basket(fruit) values('apple');
+
+INSERT INTO basket(fruit) values('orange');
+INSERT INTO basket(fruit) values('orange');
+INSERT INTO basket(fruit) values('orange');
+
+INSERT INTO basket(fruit) values('banana');
+Code language: PostgreSQL SQL dialect and PL/pgSQL (pgsql)
+Third, query data from the basket table:
+
+SELECT
+    id,
+    fruit
+FROM
+    basket;
+
+==============//Finding duplicate rows
+
+SELECT
+    fruit,
+    COUNT( fruit )
+FROM
+    basket
+GROUP BY
+    fruit
+HAVING
+    COUNT( fruit )> 1
+ORDER BY
+    fruit;
+
+----------//Deleting duplicate rows using DELETE USING statement
+
+DELETE  FROM
+    basket a
+        USING basket b
+WHERE
+    a.id > b.id
+    AND a.fruit = b.fruit;
+
+//check Result
+SELECT
+    id,
+    fruit
+FROM
+    basket;

@@ -345,12 +345,6 @@ repeat()
 select repeat('Hi',3)
 o/p>HiHiHi
 
-coalesce() --return first not null value
-select coalesce(NULL,'test');
-o/p>test
-
-select coalesce('orange','test');
-o/p>orange
 
 
 

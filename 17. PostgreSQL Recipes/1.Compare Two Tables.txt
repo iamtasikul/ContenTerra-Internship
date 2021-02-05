@@ -1,0 +1,16 @@
+//compare using EXCEPT
+We used EXCEPT operator that returns the rows in the foo table but not in the bar table. We can apply the same technique to find the rows that are in the bar table but not in the foo table.
+
+SELECT
+	ID,
+	NAME,
+	'not in bar' AS note
+FROM
+	foo
+EXCEPT
+	SELECT
+		ID,
+		NAME,
+		'not in bar' AS note
+	FROM
+		bar

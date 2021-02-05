@@ -1,0 +1,18 @@
+coalesce() --return first not null value
+select coalesce(NULL,'test');
+o/p>test
+
+SELECT COALESCE (NULL, 2 , 1);
+o/p>2
+
+
+//we want to display the excerpt from a blog post, if the excerpt is not provided, we can use the first 150 characters of the of the content of the post. 
+
+SELECT COALESCE (excerpt, LEFT(CONTENT, 150)) FROM posts;
+
+//if your product not having discount, it show null without coalesce.
+SELECT
+	product,
+	(price - COALESCE(discount,0)) AS net_price
+FROM
+	items;
