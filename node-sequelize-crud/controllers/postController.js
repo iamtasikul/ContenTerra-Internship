@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const Post = require("../models/Post");
 
 const indexController = (req, res) => {
@@ -19,6 +20,7 @@ exports.createPost = (req, res) => {
   Post.create({
     title: req.body.title,
     description: req.body.description,
+    published: req.body.published ? req.body.published : false,
   })
     .then((data) => {
       res.send(data);
@@ -32,13 +34,17 @@ exports.createPost = (req, res) => {
 
 // Retrieve all Post from the database.
 exports.findAllPost = (req, res) => {
-  Post.findAll()
+  const title = req.query.title;
+  var condition = title ? { title: { [Op.iLike]: `%${title}%` } } : null;
+  Post.findAll({ where: condition })
     .then((data) => {
       res.send(data);
     })
     .catch((err) => {
       res.status(500).send({
-        message: err.message || "Some Error Occured While Fetch Data From DB",
+        message:
+          // err.message ||
+          "Some Error Occured While Fetch Data From DB",
       });
     });
 };

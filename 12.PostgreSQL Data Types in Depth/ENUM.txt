@@ -1,0 +1,17 @@
+==========================Enum (User Defined Data type)============
+//Create Type
+create type mood as enum('sad','ok','happy');
+
+//create table
+create table person(name text,current_mood mood);
+
+//insert records
+insert into person values('Rahul','sad');
+insert into person values('Neha','ok');
+insert into person values('Robin','happy');
+
+//fetch records
+select * from person;
+
+//fetch records on index
+select min(current_mood) from person;
