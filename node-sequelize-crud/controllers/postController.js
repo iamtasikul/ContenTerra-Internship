@@ -8,28 +8,28 @@ const indexController = (req, res) => {
 exports.indexController = indexController;
 
 // Create and Save Post
-exports.createPost = (req, res) => {
+exports.createPost = async (req, res) => {
   // Validate Fields
   if (!req.body.title) {
-    errors.push({ text: "Please add a title" });
+    res.json({ message: "Please add a title" });
   }
   if (!req.body.description) {
-    errors.push({ text: "Please add some Description" });
+    res.json({ message: "Please add some Description" });
   }
-  //Insert Data
-  Post.create({
-    title: req.body.title,
-    description: req.body.description,
-    published: req.body.published ? req.body.published : false,
-  })
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while creating the Post.",
-      });
+
+  try {
+    //Insert Data
+    const createPostData = await Post.create({
+      title: req.body.title,
+      description: req.body.description,
+      published: req.body.published ? req.body.published : false,
     });
+    return res.status(200).json(createPostData);
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || "Some error occurred while creating the Post.",
+    });
+  }
 };
 
 // Retrieve all Post from the database.
