@@ -33,95 +33,85 @@ exports.createPost = async (req, res) => {
 };
 
 // Retrieve all Post from the database.
-exports.findAllPost = (req, res) => {
+exports.findAllPost = async (req, res) => {
   const title = req.query.title;
   var condition = title ? { title: { [Op.iLike]: `%${title}%` } } : null;
-  Post.findAll({ where: condition })
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          // err.message ||
-          "Some Error Occured While Fetch Data From DB",
-      });
+  try {
+    const findAllPostData = await Post.findAll({ where: condition });
+    return res.json(findAllPostData);
+  } catch (err) {
+    res.status(500).send({
+      message: "Some Error Occured While Fetch Data From DB",
     });
+  }
 };
 
 // Find a single Post with an id
-exports.findSinglePost = (req, res) => {
+exports.findSinglePost = async (req, res) => {
   const id = req.params.id;
 
-  Post.findByPk(id)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: "Error retrieving Post with id=" + id,
-      });
-    });
+  try {
+    const findSinglePostData = await Post.findByPk(id);
+    if (!findSinglePostData)
+      return res.status(404).send({ message: "Post not Found" });
+    return res.status(200).json(findSinglePostData);
+  } catch (err) {
+    res.status(500).send({ message: "Error retrieving Post with id=" + id });
+  }
 };
 
 // Update a Post by the id in the request
-exports.updatePost = (req, res) => {
+exports.updatePost = async (req, res) => {
   const id = req.params.id;
-  Post.update(req.body, { where: { id: id } })
-    .then((num) => {
-      if (num == 1) {
-        res.send({
-          message: "Post was updated successfully.",
-        });
-      } else {
-        res.send({
-          message: `Cannot update Post with id=${id}. Maybe Post was not found or req.body is empty!`,
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || `Error Update Post with id=${id}`,
-      });
+
+  try {
+    const findSinglePostData = await Post.findByPk(id);
+    if (!findSinglePostData)
+      return res.status(404).send({ message: "Post not Found" });
+    await Post.update(req.body, {
+      where: { id: findSinglePostData.id },
     });
+    const updatePostData = await Post.findByPk(id);
+    return res.status(201).json(updatePostData);
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || `Error Update Post with id=${id}`,
+    });
+  }
 };
 
 // Delete a Post with the specified id in the request
-exports.deletePost = (req, res) => {
+exports.deletePost = async (req, res) => {
   const id = req.params.id;
-  Post.destroy({
-    where: { id: id },
-  })
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: `Cannot Delete Post with id ${id} , Maybe Post Id is Wrong`,
-        });
-      } else {
-        res.send({ message: `Delete Post Successfully with id ${id}` });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: `Could Not delete Post with Id ${id}`,
-      });
+
+  try {
+    const findSinglePostData = await Post.findByPk(id);
+    if (!findSinglePostData)
+      return res.status(404).send({ message: "Post not Found" });
+    const deletePostData = await Post.destroy({
+      where: { id: findSinglePostData.id },
     });
+    return res.send({ message: "Post Deleted with Id= " + id });
+  } catch (err) {
+    res.status(500).send({
+      message: `Could Not delete Post with Id ${id}`,
+    });
+  }
 };
 
 // Delete all Post from the database.
-exports.deleteAllPost = (req, res) => {
-  Post.destroy({
-    where: {},
-    truncate: false,
-  })
-    .then((nums) => {
-      res.send({ message: `${nums} Posts are deleted Succesfully` });
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some Error Occur while Removing All Post.",
-      });
+exports.deleteAllPost = async (req, res) => {
+  try {
+    const deleteAllPostData = await Post.destroy({
+      where: {},
+      truncate: false,
     });
+    return res.send({ message: "All Post Deleted Successfully" });
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || "Some Error Occur while Removing All Post.",
+    });
+  }
 };
 
 // Find all published Posts
